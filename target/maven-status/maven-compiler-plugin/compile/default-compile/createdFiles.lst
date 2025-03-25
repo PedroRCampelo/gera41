@@ -1,4 +1,3 @@
 com/project/gera41/Gera41Application.class
 com/project/gera41/services/WordGeneratorService.class
 com/project/gera41/controller/RoutineController.class
-com/project/gera41/controller/DocumentController.class
