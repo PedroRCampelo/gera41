@@ -8,7 +8,7 @@ Repositório de aplicação para automatizar a criação da documentação MIT04
 ## Stack selecionada até então
 
 **Back-end:** Java + Spring boot
-**Dados:** PostgresSQL or Map 
+**Dados:** PostgresSQL or Map (JPA Hibernate para testes)
 **Front-end** A decidir
 
 **Lib:** - [Apache POI](https://poi.apache.org/apidocs/5.0/) - Framework para manipulação de dados em Office (Word, neste caso)
