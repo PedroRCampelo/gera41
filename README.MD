@@ -1,7 +1,7 @@
 
 # gera41
 
-Repositório de aplicação com o objetivo de automatizar a criação da documentação MIT041
+Repositório de aplicação para automatizar a criação da documentação MIT041
 
 
 
@@ -20,7 +20,7 @@ Repositório de aplicação com o objetivo de automatizar a criação da documen
 - Informações básicas já prontas
 - 
 
-## Current state (Status Report)
+## Status atual (Status Report)
 24/03/2025 - Cabeçalho criado
 [![Screenshot-2025-03-24-at-21-57-05.png](https://i.postimg.cc/yNLQQkb6/Screenshot-2025-03-24-at-21-57-05.png)](https://postimg.cc/NyrkLftZ)
 
