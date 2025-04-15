@@ -9,5 +9,4 @@ class Gera41ApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

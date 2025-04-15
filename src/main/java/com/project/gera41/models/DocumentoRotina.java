@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-// Entidade de relacionamento
 @Entity
 @Table(name = "documento_rotinas")
-@Getter @Setter
+@Getter
+@Setter
 public class DocumentoRotina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,6 @@ public class DocumentoRotina {
     @ManyToOne
     @JoinColumn(name = "rotina_id")
     private Rotina rotina;
-    
-    private int ordem;
-    
+
+    private Integer ordem;
 }

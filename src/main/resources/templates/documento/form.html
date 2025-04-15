@@ -38,7 +38,6 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <!-- Use 'nomeProjeto' ou 'nome' se adicionado -->
                             <label for="nomeProjeto">Nome do Projeto:</label>
                             <input type="text" class="form-control" id="nomeProjeto" th:field="*{nomeProjeto}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('nomeProjeto')}" th:errors="*{nomeProjeto}"></div>
@@ -106,16 +105,6 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="descricao">Descrição:</label>
-                            <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="3"></textarea>
-                            <div class="text-danger" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <hr>
                 <h4>Rotinas do Documento</h4>
 
@@ -174,21 +163,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Contador para manter o controle da ordem
         let rotinaCounter = $('.rotina-item').length;
 
-        // Inicializar o Sortable.js para permitir arrastar e soltar
         const rotinasContainer = document.getElementById('rotinas-container');
         new Sortable(rotinasContainer, {
             handle: '.drag-handle',
             animation: 150,
             onEnd: function() {
-                // Atualizar a ordem das rotinas após arrastar
                 atualizarOrdemRotinas();
             }
         });
 
-        // Adicionar nova rotina ao clicar no botão
         $('#adicionar-rotina').click(function() {
             const rotinaSelect = $('#rotina-select');
             const rotinaId = rotinaSelect.val();
@@ -196,13 +181,12 @@
 
             if (rotinaId) {
                 adicionarRotina(rotinaId, rotinaNome);
-                rotinaSelect.val(''); // Limpar seleção
+                rotinaSelect.val('');
             } else {
                 alert('Por favor, selecione uma rotina para adicionar.');
             }
         });
 
-        // Função para adicionar uma rotina à lista
         function adicionarRotina(rotinaId, rotinaNome) {
             const novaRotina = `
                     <div class="rotina-item">
@@ -226,25 +210,20 @@
 
             $('#rotinas-container').append(novaRotina);
             rotinaCounter++;
-
-            // Atualizar a ordem das rotinas
             atualizarOrdemRotinas();
         }
 
-        // Remover rotina quando clicar no botão remover
         $(document).on('click', '.remover-rotina', function() {
             $(this).closest('.rotina-item').remove();
             atualizarOrdemRotinas();
         });
 
-        // Função para atualizar a ordem de todas as rotinas
         function atualizarOrdemRotinas() {
             $('.rotina-item').each(function(index) {
                 $(this).find('.ordem-input').val(index);
             });
         }
 
-        // Inicializar as ordens das rotinas existentes
         atualizarOrdemRotinas();
     });
 </script>

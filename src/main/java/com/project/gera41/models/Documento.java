@@ -18,9 +18,6 @@ public class Documento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nome do documento é obrigatório")
-    private String nome;
-
     @NotBlank(message = "Nome do cliente é obrigatório")
     private String nomeCliente;
 
@@ -40,9 +37,6 @@ public class Documento {
     private String propostaComercial;
     private String gerenteTotvs;
     private String gerenteCliente;
-
-    @Column(columnDefinition = "TEXT")
-    private String descricao;
 
     @OneToMany(mappedBy = "documento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DocumentoRotina> documentoRotinas = new ArrayList<>();
