@@ -1,2 +1,10 @@
-/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/Gera41Application.java
 /Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/services/WordGeneratorService.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/models/Documento.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/controller/DocumentoController.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/config/DataInitializer.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/models/DocumentoRotina.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/Gera41Application.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/services/InMemoryDataService.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/repositories/RotinaRepository.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/repositories/DocumentoRepository.java
+/Users/pedrocampelo/Documents/projects/gera41/src/main/java/com/project/gera41/models/Rotina.java

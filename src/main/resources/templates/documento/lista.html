@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Documentos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Documentos</h2>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Início</a></li>
+                    <li class="breadcrumb-item active">Documentos</li>
+                </ol>
+            </nav>
+
+            <div class="mt-3 mb-3">
+                <a th:href="@{/documentos/novo}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Novo Documento
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div th:if="${documentos.isEmpty()}" class="alert alert-info">
+                        Nenhum documento encontrado. Clique em "Novo Documento" para adicionar.
+                    </div>
+
+                    <div th:if="${!documentos.isEmpty()}" class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Código Cliente</th>
+                                <th>Código Projeto</th>
+                                <th>Rotinas</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="doc : ${documentos}">
+                                <!-- Use 'nome' se adicionado à entidade, ou 'nomeProjeto' se não -->
+                                <td th:text="${doc.nomeProjeto}"></td>
+                                <td th:text="${doc.codigoCliente}"></td>
+                                <td th:text="${doc.codigoProjeto}"></td>
+                                <td th:text="${doc.documentoRotinas.size()}"></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a th:href="@{/documentos/editar/{id}(id=${doc.id})}"
+                                           class="btn btn-sm btn-warning" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a th:href="@{/documentos/gerar/{id}(id=${doc.id})}"
+                                           class="btn btn-sm btn-primary" title="Gerar Word">
+                                            <i class="bi bi-file-earmark-word"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="'#deleteModal' + ${doc.id}"
+                                                title="Excluir">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal de Confirmação de Exclusão -->
+                                    <div class="modal fade" th:id="'deleteModal' + ${doc.id}" tabindex="-1"
+                                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- Use 'nome' ou 'nomeProjeto' aqui também -->
+                                                    <p>Tem certeza que deseja excluir o documento: <strong th:text="${doc.nomeProjeto}"></strong>?</p>
+                                                    <p class="text-danger">Esta ação não pode ser desfeita.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <a th:href="@{/documentos/excluir/{id}(id=${doc.id})}" class="btn btn-danger">Excluir</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Documentos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .rotina-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .drag-handle {
+            cursor: move;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 th:text="${documento.id != null ? 'Editar Documento' : 'Novo Documento'}">Documento</h2>
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Início</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/documentos/listar}">Documentos</a></li>
+                    <li class="breadcrumb-item active" th:text="${documento.id != null ? 'Editar' : 'Novo'}"></li>
+                </ol>
+            </nav>
+
+            <form th:action="@{/documentos/salvar}" th:object="${documento}" method="post" id="documentoForm" class="mt-4">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- Use 'nomeProjeto' ou 'nome' se adicionado -->
+                            <label for="nomeProjeto">Nome do Projeto:</label>
+                            <input type="text" class="form-control" id="nomeProjeto" th:field="*{nomeProjeto}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('nomeProjeto')}" th:errors="*{nomeProjeto}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="nomeCliente">Nome do Cliente:</label>
+                            <input type="text" class="form-control" id="nomeCliente" th:field="*{nomeCliente}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('nomeCliente')}" th:errors="*{nomeCliente}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="codigoCliente">Código do Cliente:</label>
+                            <input type="text" class="form-control" id="codigoCliente" th:field="*{codigoCliente}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('codigoCliente')}" th:errors="*{codigoCliente}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="codigoProjeto">Código do Projeto:</label>
+                            <input type="text" class="form-control" id="codigoProjeto" th:field="*{codigoProjeto}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('codigoProjeto')}" th:errors="*{codigoProjeto}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="segmentoCliente">Segmento do Cliente:</label>
+                            <input type="text" class="form-control" id="segmentoCliente" th:field="*{segmentoCliente}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="unidadeTotvs">Unidade TOTVS:</label>
+                            <input type="text" class="form-control" id="unidadeTotvs" th:field="*{unidadeTotvs}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="propostaComercial">Proposta Comercial:</label>
+                            <input type="text" class="form-control" id="propostaComercial" th:field="*{propostaComercial}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="gerenteTotvs">Gerente TOTVS:</label>
+                            <input type="text" class="form-control" id="gerenteTotvs" th:field="*{gerenteTotvs}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="gerenteCliente">Gerente Cliente:</label>
+                            <input type="text" class="form-control" id="gerenteCliente" th:field="*{gerenteCliente}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="descricao">Descrição:</label>
+                            <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="3"></textarea>
+                            <div class="text-danger" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h4>Rotinas do Documento</h4>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="rotina-select">Selecione uma rotina para adicionar:</label>
+                            <select class="form-control" id="rotina-select">
+                                <option value="">Selecione uma rotina...</option>
+                                <option th:each="rotina : ${rotinas}"
+                                        th:value="${rotina.id}"
+                                        th:text="${rotina.nome}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary mt-4" id="adicionar-rotina">
+                            Adicionar Rotina
+                        </button>
+                    </div>
+                </div>
+
+                <div id="rotinas-container" class="mt-3">
+                    <div th:each="docRotina, stat : *{documentoRotinas}" class="rotina-item">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="drag-handle">
+                                    <i class="bi bi-grip-vertical"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <span th:text="${docRotina.rotina.nome}"></span>
+                                <input type="hidden" name="rotinasIds" th:value="${docRotina.rotina.id}">
+                                <input type="hidden" name="ordens" th:value="${docRotina.ordem}" class="ordem-input">
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <button type="button" class="btn btn-danger btn-sm remover-rotina">Remover</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success">Salvar Documento</button>
+                        <a th:href="@{/documentos/listar}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Contador para manter o controle da ordem
+        let rotinaCounter = $('.rotina-item').length;
+
+        // Inicializar o Sortable.js para permitir arrastar e soltar
+        const rotinasContainer = document.getElementById('rotinas-container');
+        new Sortable(rotinasContainer, {
+            handle: '.drag-handle',
+            animation: 150,
+            onEnd: function() {
+                // Atualizar a ordem das rotinas após arrastar
+                atualizarOrdemRotinas();
+            }
+        });
+
+        // Adicionar nova rotina ao clicar no botão
+        $('#adicionar-rotina').click(function() {
+            const rotinaSelect = $('#rotina-select');
+            const rotinaId = rotinaSelect.val();
+            const rotinaNome = rotinaSelect.find('option:selected').text();
+
+            if (rotinaId) {
+                adicionarRotina(rotinaId, rotinaNome);
+                rotinaSelect.val(''); // Limpar seleção
+            } else {
+                alert('Por favor, selecione uma rotina para adicionar.');
+            }
+        });
+
+        // Função para adicionar uma rotina à lista
+        function adicionarRotina(rotinaId, rotinaNome) {
+            const novaRotina = `
+                    <div class="rotina-item">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="drag-handle">
+                                    <i class="bi bi-grip-vertical"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <span>${rotinaNome}</span>
+                                <input type="hidden" name="rotinasIds" value="${rotinaId}">
+                                <input type="hidden" name="ordens" value="${rotinaCounter}" class="ordem-input">
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <button type="button" class="btn btn-danger btn-sm remover-rotina">Remover</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            $('#rotinas-container').append(novaRotina);
+            rotinaCounter++;
+
+            // Atualizar a ordem das rotinas
+            atualizarOrdemRotinas();
+        }
+
+        // Remover rotina quando clicar no botão remover
+        $(document).on('click', '.remover-rotina', function() {
+            $(this).closest('.rotina-item').remove();
+            atualizarOrdemRotinas();
+        });
+
+        // Função para atualizar a ordem de todas as rotinas
+        function atualizarOrdemRotinas() {
+            $('.rotina-item').each(function(index) {
+                $(this).find('.ordem-input').val(index);
+            });
+        }
+
+        // Inicializar as ordens das rotinas existentes
+        atualizarOrdemRotinas();
+    });
+</script>
+</body>
+</html>
