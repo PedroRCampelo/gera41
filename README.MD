@@ -21,11 +21,11 @@ Repositório de aplicação com o objetivo de automatizar a criação da documen
 -
 
 ## Status atual (Status Report)
-24/03/2025 - Cabeçalho criado
+24/03/2025 - Formato do cabeçalho criado
 
 [![Screenshot-2025-03-24-at-21-57-05.png](https://i.postimg.cc/yNLQQkb6/Screenshot-2025-03-24-at-21-57-05.png)](https://postimg.cc/NyrkLftZ)
 
-15/04/2025 - Frontend e criação de entidades para rotinas pré cadastradas
+15/04/2025 - Frontend e criação de entidades para rotinas pré-cadastradas
 
 [![Screenshot-2025-04-15-at-16-05-01.png](https://i.postimg.cc/htvCDN7K/Screenshot-2025-04-15-at-16-05-01.png)](https://postimg.cc/yDqhnQPG)
 
@@ -33,7 +33,7 @@ Impressão e ajuste de Documento (MIT041)
 
 [![Screenshot-2025-04-15-at-16-05-46.png](https://i.postimg.cc/m2kHn4HN/Screenshot-2025-04-15-at-16-05-46.png)](https://postimg.cc/9r304v1r)
 
-[![Screenshot-2025-04-15-at-16-13-08.png](https://i.postimg.cc/hj7m2W3P/Screenshot-2025-04-15-at-16-13-08.png)](https://postimg.cc/gXmr05Wf)
+[![Screenshot-2025-04-15-at-17-29-24.png](https://i.postimg.cc/MG4LZ44C/Screenshot-2025-04-15-at-17-29-24.png)](https://postimg.cc/5HBgnPfg)
 
 ## Próximos passos
 - Ajustar layout do Word;
