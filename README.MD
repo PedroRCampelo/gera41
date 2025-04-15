@@ -36,7 +36,7 @@ Impressão e ajuste de Documento (MIT041)
 [![Screenshot-2025-04-15-at-16-13-08.png](https://i.postimg.cc/hj7m2W3P/Screenshot-2025-04-15-at-16-13-08.png)](https://postimg.cc/gXmr05Wf)
 
 ## Próximos passos
-Ajustar layout do Word;
-Adicionar botão para criação de rotinas;
-Manter rotinas salvas em um banco persistente;
-...
+- Ajustar layout do Word;
+- Adicionar botão para criação de rotinas;
+- Manter rotinas salvas em um banco persistente;
+- ...
