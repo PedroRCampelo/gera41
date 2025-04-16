@@ -21,9 +21,12 @@ public class InMemoryDataService {
         // Inicializar rotinas
         Rotina rotina = new Rotina();
         rotina.setId(rotinaIdCounter.getAndIncrement());
-        rotina.setCodigo("ROT001");
-        rotina.setNome("Rotina de Cadastro");
-        rotina.setDescricao("Gerenciamento de cadastros");
+        rotina.setCodigo("CDFT001");
+        rotina.setNome("Clientes");
+        rotina.setDescricao("Cliente é a entidade que possui necessidades de produtos e serviços a serem supridas pelas empresas.\n" +
+                "Conceitualmente, na maioria das vezes em que é emitido um documento de saída, o destinatário é considerado um cliente, independentemente do tipo que ele possua ou da denominação que a empresa tenha determinado para ele.\n" +
+                "\n" +
+                "No ambiente FATURAMENTO, o cadastro de Clientes é uma etapa obrigatória para que os pedidos de vendas sejam registrados e os documentos de saída possam ser gerados. É possível classificar os clientes em cinco tipos:\n");
         rotina.setCategoria("Cadastro");
         rotina.setAtivo(true);
         rotinas.add(rotina);

@@ -17,6 +17,7 @@ public class Rotina {
 
     private String nome;
 
+    @Column(length=1000000)
     private String descricao;
 
     private String categoria;

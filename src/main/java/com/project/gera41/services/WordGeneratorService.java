@@ -21,7 +21,7 @@ public class WordGeneratorService {
 
     public File generateDocument(Documento documento, List<DocumentoRotina> documentoRotinas) throws IOException {
         XWPFDocument wordDocument = new XWPFDocument();
-
+        
         // Texto "Ambientação"
         XWPFParagraph titleParagraph = wordDocument.createParagraph();
         titleParagraph.setAlignment(ParagraphAlignment.LEFT);
@@ -39,14 +39,13 @@ public class WordGeneratorService {
 
         // START HEADER
         LocalDate dataCriacao = documento.getDataCriacao() != null ? documento.getDataCriacao() : LocalDate.now();
-
         String[][] dados = {
-                {"Nome do Cliente:" + documento.getNomeCliente(), "Código do Cliente:" + documento.getCodigoCliente()},
-                {"Nome do projeto:" + documento.getNomeProjeto(), "Código do projeto:" + documento.getCodigoProjeto()},
-                {"Segmento cliente:" + documento.getSegmentoCliente(), "Unidade TOTVS:" + documento.getUnidadeTotvs()},
-                {"Data:" + dataCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Proposta comercial: "},
-                {"Gerente/Coordenador TOTVS:" + documento.getGerenteTotvs(), ""},
-                {"Gerente/Coordenador cliente:" + documento.getGerenteCliente(), ""},
+                {"Nome do Cliente: " + documento.getNomeCliente(), "Código do Cliente: " + documento.getCodigoCliente()},
+                {"Nome do projeto: " + documento.getNomeProjeto(), "Código do projeto: " + documento.getCodigoProjeto()},
+                {"Segmento cliente: " + documento.getSegmentoCliente(), "Unidade TOTVS: " + documento.getUnidadeTotvs()},
+                {"Data: " + dataCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Proposta comercial: " + documento.getPropostaComercial()},
+                {"Gerente/Coordenador TOTVS: " + documento.getGerenteTotvs(), ""},
+                {"Gerente/Coordenador cliente: " + documento.getGerenteCliente(), ""},
         };
 
         // Criar objeto do cabeçalho
@@ -77,7 +76,8 @@ public class WordGeneratorService {
                 tcMar.addNewBottom().setW(60); // Margem inferior
             }
         }
-        // Preencher a tabela com os dados
+        
+        // Ajuestes da tabela
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 2; j++) {
                 XWPFTableCell cell = table.getRow(i).getCell(j); // Obtém a célula da linha i, coluna j
@@ -132,12 +132,12 @@ public class WordGeneratorService {
         table.getCTTbl().getTblPr().getTblBorders().getRight().setColor("FFA500"); // Borda direita
         // END HEADER
         
-        // Rotinas
         if (!documentoRotinas.isEmpty()) {
-            addSectionTitle(wordDocument, "2. Rotinas");
+            addSectionTitle(wordDocument, "1. Processo: Faturamento"); // Incluir variável de módulo da MIT041
             addRotinas(wordDocument, documentoRotinas);
         }
 
+        
         // Salvar o arquivo
         String fileName = "temp_" + documento.getId() + ".docx";
         File file = new File(fileName);
@@ -147,6 +147,7 @@ public class WordGeneratorService {
         return file;
     }
 
+    // START ROTINAS    
     private void addTitle(XWPFDocument document, String title) {
         XWPFParagraph titleParagraph = document.createParagraph();
         titleParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -168,77 +169,28 @@ public class WordGeneratorService {
         addEmptyLine(document, 1);
     }
 
-    private void addTableWithInfo(XWPFDocument document, Documento documento) {
-        XWPFTable table = document.createTable(10, 2);
-        table.setWidth("100%");
-
-        // Estilo da tabela
-        CTTblPr tblPr = table.getCTTbl().addNewTblPr();
-        CTTblWidth tblWidth = tblPr.addNewTblW();
-        tblWidth.setW(BigInteger.valueOf(5000));
-        tblWidth.setType(STTblWidth.PCT);
-
-        // Dados da tabela
-        LocalDate dataCriacao = documento.getDataCriacao() != null ? documento.getDataCriacao() : LocalDate.now();
-        setTableCell(table, 0, 0, "Data de Criação:");
-        setTableCell(table, 0, 1, dataCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        setTableCell(table, 1, 0, "Nome do Cliente:");
-        setTableCell(table, 1, 1, documento.getNomeCliente() != null ? documento.getNomeCliente() : "-");
-        setTableCell(table, 2, 0, "Código do Cliente:");
-        setTableCell(table, 2, 1, documento.getCodigoCliente() != null ? documento.getCodigoCliente() : "-");
-        setTableCell(table, 3, 0, "Nome do Projeto:");
-        setTableCell(table, 3, 1, documento.getNomeProjeto() != null ? documento.getNomeProjeto() : "-");
-        setTableCell(table, 4, 0, "Código do Projeto:");
-        setTableCell(table, 4, 1, documento.getCodigoProjeto() != null ? documento.getCodigoProjeto() : "-");
-        setTableCell(table, 5, 0, "Segmento do Cliente:");
-        setTableCell(table, 5, 1, documento.getSegmentoCliente() != null ? documento.getSegmentoCliente() : "-");
-        setTableCell(table, 6, 0, "Unidade TOTVS:");
-        setTableCell(table, 6, 1, documento.getUnidadeTotvs() != null ? documento.getUnidadeTotvs() : "-");
-        setTableCell(table, 7, 0, "Proposta Comercial:");
-        setTableCell(table, 7, 1, documento.getPropostaComercial() != null ? documento.getPropostaComercial() : "-");
-        setTableCell(table, 8, 0, "Gerente TOTVS:");
-        setTableCell(table, 8, 1, documento.getGerenteTotvs() != null ? documento.getGerenteTotvs() : "-");
-        setTableCell(table, 9, 0, "Gerente Cliente:");
-        setTableCell(table, 9, 1, documento.getGerenteCliente() != null ? documento.getGerenteCliente() : "-");
-
-        addEmptyLine(document, 1);
-    }
-
-    private void setTableCell(XWPFTable table, int row, int col, String text) {
-        XWPFTableCell cell = table.getRow(row).getCell(col);
-        XWPFParagraph paragraph;
-        List<XWPFParagraph> paragraphs = cell.getParagraphs();
-        if (paragraphs.isEmpty()) {
-            paragraph = cell.addParagraph();
-        } else {
-            paragraph = paragraphs.get(0); // Usar get(0) em vez de getFirst()
-        }
-        XWPFRun run = paragraph.createRun();
-        run.setText(text);
-        run.setFontFamily("Arial");
-        run.setFontSize(12);
-        cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-    }
-
     private void addRotinas(XWPFDocument document, List<DocumentoRotina> documentoRotinas) {
         // Ordenar rotinas por ordem
         documentoRotinas.sort(Comparator.comparing(DocumentoRotina::getOrdem));
-
+        int i = 1;
         for (DocumentoRotina docRotina : documentoRotinas) {
             Rotina rotina = docRotina.getRotina();
+
             XWPFParagraph rotinaParagraph = document.createParagraph();
             XWPFRun rotinaRun = rotinaParagraph.createRun();
-            rotinaRun.setText("Rotina: " + rotina.getCodigo() + " - " + rotina.getNome());
-            rotinaRun.setFontFamily("Arial");
-            rotinaRun.setFontSize(12);
+            rotinaRun.setText(i + ". " + rotina.getNome());
+            i++;
+            rotinaRun.setFontFamily("Tahoma");
+            rotinaRun.setFontSize(14);
+            rotinaRun.setColor("FEAC0E");
             rotinaRun.setBold(true);
 
             // Descrição da Rotina
             XWPFParagraph descParagraph = document.createParagraph();
             XWPFRun descRun = descParagraph.createRun();
             descRun.setText(rotina.getDescricao() != null ? rotina.getDescricao() : "Sem descrição");
-            descRun.setFontFamily("Arial");
-            descRun.setFontSize(12);
+            descRun.setFontFamily("Tahoma");
+            descRun.setFontSize(10);
 
             addEmptyLine(document, 1);
         }
