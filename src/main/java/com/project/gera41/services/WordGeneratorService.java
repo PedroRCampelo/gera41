@@ -34,8 +34,8 @@ public class WordGeneratorService {
         titleRun.setColor("FEAC0E");
 
         // Informações Gerais
-//        addSectionTitle(wordDocument, "1. Informações Gerais");
-//        addTableWithInfo(wordDocument, documento);
+        // addSectionTitle(wordDocument, "1. Informações Gerais");
+        // addTableWithInfo(wordDocument, documento);
 
         // START HEADER
         LocalDate dataCriacao = documento.getDataCriacao() != null ? documento.getDataCriacao() : LocalDate.now();
@@ -77,7 +77,7 @@ public class WordGeneratorService {
             }
         }
         
-        // Ajuestes da tabela
+        // Ajustes da tabela
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 2; j++) {
                 XWPFTableCell cell = table.getRow(i).getCell(j); // Obtém a célula da linha i, coluna j
@@ -136,7 +136,6 @@ public class WordGeneratorService {
             addSectionTitle(wordDocument, "1. Processo: Faturamento"); // Incluir variável de módulo da MIT041
             addRotinas(wordDocument, documentoRotinas);
         }
-
         
         // Salvar o arquivo
         String fileName = "temp_" + documento.getId() + ".docx";

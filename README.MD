@@ -33,8 +33,7 @@ Impressão e ajuste de Documento (MIT041)
 
 [![Screenshot-2025-04-15-at-16-05-46.png](https://i.postimg.cc/m2kHn4HN/Screenshot-2025-04-15-at-16-05-46.png)](https://postimg.cc/9r304v1r)
 
-[![Screenshot-2025-04-15-at-17-29-24.png](https://i.postimg.cc/MG4LZ44C/Screenshot-2025-04-15-at-17-29-24.png)](https://postimg.cc/5HBgnPfg)
-
+[![Screenshot-2025-04-16-at-17-37-17.png](https://i.postimg.cc/FsK4MmDv/Screenshot-2025-04-16-at-17-37-17.png)](https://postimg.cc/xqBhmwwp)
 ## Próximos passos
 - Implementar funcionalidade de criar rotinas pelo usuário;
 - Manter rotinas salvas em um banco persistente;
