@@ -35,7 +35,8 @@ Impressão e ajuste de Documento (MIT041)
 
 [![Screenshot-2025-04-16-at-17-37-17.png](https://i.postimg.cc/FsK4MmDv/Screenshot-2025-04-16-at-17-37-17.png)](https://postimg.cc/xqBhmwwp)
 ## Próximos passos
+- Migrar para o banco de dados MySql;
+- Manter rotinas salvas em um banco persistente (MySql);
 - Implementar funcionalidade de criar rotinas pelo usuário;
-- Manter rotinas salvas em um banco persistente;
 - Ajustar formatação das rotinas
 - ...
