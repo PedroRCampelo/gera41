@@ -18,7 +18,16 @@ Repositório de aplicação com o objetivo de automatizar a criação da documen
 - Geração interativa da documentação Word
 - Possibilidade de manipulação
 - Informações básicas já prontas
--
+
+## Controllers 
+Documentos (MIT041)
+- http://localhost:8080/documentos/listar - listar MITs criadas
+- http://localhost:8080/documentos/novo - criar nova MIT
+
+Rotinas (Cadastro das rotinas)
+- http://localhost:8080/rotinas/listar - listar rotinas
+- http://localhost:8080/rotinas/novo - criar nova rotina
+
 
 ## Status atual (Status Report)
 

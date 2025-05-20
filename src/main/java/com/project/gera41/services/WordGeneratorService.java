@@ -21,122 +21,20 @@ public class WordGeneratorService {
 
     public File generateDocument(Documento documento, List<DocumentoRotina> documentoRotinas) throws IOException {
         XWPFDocument wordDocument = new XWPFDocument();
-        
-        // Texto "Ambientação"
-        XWPFParagraph titleParagraph = wordDocument.createParagraph();
-        titleParagraph.setAlignment(ParagraphAlignment.LEFT);
-        titleParagraph.setSpacingAfter(250); // Espaçamento após o título (em twips; 200 = ~10 pontos)
-        XWPFRun titleRun = titleParagraph.createRun();
-        titleRun.setFontFamily("Tahoma");
-        titleRun.setText("Ambientação");
-        titleRun.setBold(true);
-        titleRun.setFontSize(14);
-        titleRun.setColor("FEAC0E");
+
+        // Título do Documento
+        addTitle(wordDocument, "Especificação Técnica - " + documento.getNomeProjeto());
 
         // Informações Gerais
-        // addSectionTitle(wordDocument, "1. Informações Gerais");
-        // addTableWithInfo(wordDocument, documento);
+        addSectionTitle(wordDocument, "1. Informações Gerais");
+        addTableWithInfo(wordDocument, documento);
 
-        // START HEADER
-        LocalDate dataCriacao = documento.getDataCriacao() != null ? documento.getDataCriacao() : LocalDate.now();
-        String[][] dados = {
-                {"Nome do Cliente: " + documento.getNomeCliente(), "Código do Cliente: " + documento.getCodigoCliente()},
-                {"Nome do projeto: " + documento.getNomeProjeto(), "Código do projeto: " + documento.getCodigoProjeto()},
-                {"Segmento cliente: " + documento.getSegmentoCliente(), "Unidade TOTVS: " + documento.getUnidadeTotvs()},
-                {"Data: " + dataCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Proposta comercial: " + documento.getPropostaComercial()},
-                {"Gerente/Coordenador TOTVS: " + documento.getGerenteTotvs(), ""},
-                {"Gerente/Coordenador cliente: " + documento.getGerenteCliente(), ""},
-        };
-
-        // Criar objeto do cabeçalho
-        XWPFTable table = wordDocument.createTable(6, 2);
-
-        // Definir a largura fixa da tabela (em twips; 1 polegada = 1440 twips)
-        table.setWidth(9000); // Aproximadamente 6,25 polegadas (5000 + 4000 = 9000 twips)
-        table.getCTTbl().getTblPr().getTblW().setType(STTblWidth.DXA); // Unidade em twips
-        table.getCTTbl().getTblPr().getTblW().setW(9000); // Largura fixa
-
-        // Definir a largura fixa das colunas (mantendo os valores já definidos: 5000 e 4000 twips)
-        for (int col = 0; col < 2; col++) {
-            table.getRow(0).getCell(col).getCTTc().addNewTcPr().addNewTcW().setW(col == 0 ? 5000 : 4000);
-            table.getRow(0).getCell(col).getCTTc().addNewTcPr().addNewTcW().setType(STTblWidth.DXA);
-        }
-
-        // Definir margens internas (padding) nas células
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 2; j++) {
-                XWPFTableCell cell = table.getRow(i).getCell(j);
-                cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER); // Alinhamento vertical central
-                // Definir margens internas (em twips)
-                org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr tcPr = cell.getCTTc().addNewTcPr();
-                org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcMar tcMar = tcPr.addNewTcMar();
-                tcMar.addNewLeft().setW(60); // Margem esquerda
-                tcMar.addNewRight().setW(60); // Margem direita
-                tcMar.addNewTop().setW(60); // Margem superior
-                tcMar.addNewBottom().setW(60); // Margem inferior
-            }
-        }
-        
-        // Ajustes da tabela
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 2; j++) {
-                XWPFTableCell cell = table.getRow(i).getCell(j); // Obtém a célula da linha i, coluna j
-                XWPFParagraph paragraph = cell.getParagraphs().get(0); // Obtém o parágrafo dentro da célula
-                paragraph.setAlignment(ParagraphAlignment.LEFT); // Alinhamento à esquerda
-                paragraph.setSpacingAfter(0); // Retirando o espaçamento padrão do word (abaixo da linha)
-
-                String cellText = dados[i][j];
-                if (cellText.contains(":")) {
-                    // Dividir o texto em duas partes: antes e depois do ":"
-                    String[] parts = cellText.split(":", 2); // Divide no primeiro ":"
-                    String beforeColon = parts[0] + ":"; // Parte antes do ":" (incluindo o ":")
-                    String afterColon = parts.length > 1 ? parts[1] : ""; // Parte depois do ":", se existir
-
-                    // Texto antes do ":" em negrito
-                    XWPFRun runBefore = paragraph.createRun();
-                    runBefore.setColor("434343");
-                    runBefore.setFontFamily("Tahoma");
-                    runBefore.setText(beforeColon);
-                    runBefore.setFontSize(10);
-                    runBefore.setBold(true); // Negrito
-
-                    // Texto depois do ":" sem negrito
-                    XWPFRun runAfter = paragraph.createRun();
-                    runAfter.setColor("7F7A7F");
-                    runAfter.setFontFamily("Tahoma");
-                    runAfter.setText(afterColon);
-                    runAfter.setFontSize(10);
-                    runAfter.setBold(false); // Sem negrito
-                } else {
-                    // Se não houver ":", exibir o texto normalmente
-                    XWPFRun run = paragraph.createRun();
-                    run.setColor("7F7A7F");
-                    run.setFontFamily("Tahoma");
-                    run.setText(cellText);
-                    run.setFontSize(10);
-                    run.setBold(false);
-                }
-            }
-        }
-
-        // Adicionar espaçamento após a tabela
-        XWPFParagraph spacingParagraph = wordDocument.createParagraph();
-        spacingParagraph.setSpacingBefore(200); // Espaçamento antes do parágrafo (em twips; 200 = ~10 pontos)
-
-        // Definir a cor da borda da tabela (laranja "FFA500", como já definido)
-        table.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE, 4, 0, "FFA500"); // Borda horizontal interna
-        table.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE, 4, 0, "FFA500"); // Borda vertical interna
-        table.getCTTbl().getTblPr().getTblBorders().getTop().setColor("FFA500"); // Borda superior
-        table.getCTTbl().getTblPr().getTblBorders().getBottom().setColor("FFA500"); // Borda inferior
-        table.getCTTbl().getTblPr().getTblBorders().getLeft().setColor("FFA500"); // Borda esquerda
-        table.getCTTbl().getTblPr().getTblBorders().getRight().setColor("FFA500"); // Borda direita
-        // END HEADER
-        
+        // Rotinas
         if (!documentoRotinas.isEmpty()) {
-            addSectionTitle(wordDocument, "1. Processo: Faturamento"); // Incluir variável de módulo da MIT041
+            addSectionTitle(wordDocument, "2. Rotinas");
             addRotinas(wordDocument, documentoRotinas);
         }
-        
+
         // Salvar o arquivo
         String fileName = "temp_" + documento.getId() + ".docx";
         File file = new File(fileName);
@@ -146,7 +44,6 @@ public class WordGeneratorService {
         return file;
     }
 
-    // START ROTINAS    
     private void addTitle(XWPFDocument document, String title) {
         XWPFParagraph titleParagraph = document.createParagraph();
         titleParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -168,28 +65,106 @@ public class WordGeneratorService {
         addEmptyLine(document, 1);
     }
 
+    private void addTableWithInfo(XWPFDocument document, Documento documento) {
+        XWPFTable table = document.createTable(10, 2);
+        table.setWidth("100%");
+
+        // Estilo da tabela
+        CTTblPr tblPr = table.getCTTbl().addNewTblPr();
+        CTTblWidth tblWidth = tblPr.addNewTblW();
+        tblWidth.setW(BigInteger.valueOf(5000));
+        tblWidth.setType(STTblWidth.PCT);
+
+        // Dados da tabela
+        LocalDate dataCriacao = documento.getDataCriacao() != null ? documento.getDataCriacao() : LocalDate.now();
+        setTableCell(table, 0, 0, "Data de Criação:");
+        setTableCell(table, 0, 1, dataCriacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        setTableCell(table, 1, 0, "Nome do Cliente:");
+        setTableCell(table, 1, 1, documento.getNomeCliente() != null ? documento.getNomeCliente() : "-");
+        setTableCell(table, 2, 0, "Código do Cliente:");
+        setTableCell(table, 2, 1, documento.getCodigoCliente() != null ? documento.getCodigoCliente() : "-");
+        setTableCell(table, 3, 0, "Nome do Projeto:");
+        setTableCell(table, 3, 1, documento.getNomeProjeto() != null ? documento.getNomeProjeto() : "-");
+        setTableCell(table, 4, 0, "Código do Projeto:");
+        setTableCell(table, 4, 1, documento.getCodigoProjeto() != null ? documento.getCodigoProjeto() : "-");
+        setTableCell(table, 5, 0, "Segmento do Cliente:");
+        setTableCell(table, 5, 1, documento.getSegmentoCliente() != null ? documento.getSegmentoCliente() : "-");
+        setTableCell(table, 6, 0, "Unidade TOTVS:");
+        setTableCell(table, 6, 1, documento.getUnidadeTotvs() != null ? documento.getUnidadeTotvs() : "-");
+        setTableCell(table, 7, 0, "Proposta Comercial:");
+        setTableCell(table, 7, 1, documento.getPropostaComercial() != null ? documento.getPropostaComercial() : "-");
+        setTableCell(table, 8, 0, "Gerente TOTVS:");
+        setTableCell(table, 8, 1, documento.getGerenteTotvs() != null ? documento.getGerenteTotvs() : "-");
+        setTableCell(table, 9, 0, "Gerente Cliente:");
+        setTableCell(table, 9, 1, documento.getGerenteCliente() != null ? documento.getGerenteCliente() : "-");
+
+        addEmptyLine(document, 1);
+    }
+
+    private void setTableCell(XWPFTable table, int row, int col, String text) {
+        XWPFTableCell cell = table.getRow(row).getCell(col);
+        XWPFParagraph paragraph;
+        List<XWPFParagraph> paragraphs = cell.getParagraphs();
+        if (paragraphs.isEmpty()) {
+            paragraph = cell.addParagraph();
+        } else {
+            paragraph = paragraphs.get(0);
+        }
+        XWPFRun run = paragraph.createRun();
+        run.setText(text);
+        run.setFontFamily("Arial");
+        run.setFontSize(12);
+        cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+    }
+
     private void addRotinas(XWPFDocument document, List<DocumentoRotina> documentoRotinas) {
-        // Ordenar rotinas por ordem
-        documentoRotinas.sort(Comparator.comparing(DocumentoRotina::getOrdem));
-        int i = 1;
+        documentoRotinas.sort(Comparator.comparing(DocumentoRotina::getOrdem, Comparator.nullsLast(Comparator.naturalOrder())));
+
         for (DocumentoRotina docRotina : documentoRotinas) {
             Rotina rotina = docRotina.getRotina();
-
             XWPFParagraph rotinaParagraph = document.createParagraph();
             XWPFRun rotinaRun = rotinaParagraph.createRun();
-            rotinaRun.setText(i + ". " + rotina.getNome());
-            i++;
-            rotinaRun.setFontFamily("Tahoma");
-            rotinaRun.setFontSize(14);
-            rotinaRun.setColor("FEAC0E");
+            String codigo = rotina.getCodigo() != null ? rotina.getCodigo() : "SEM_CODIGO";
+            String nome = rotina.getNome() != null ? rotina.getNome() : "SEM_NOME";
+            rotinaRun.setText("Rotina: " + codigo + " - " + nome);
+            rotinaRun.setFontFamily("Arial");
+            rotinaRun.setFontSize(12);
             rotinaRun.setBold(true);
 
-            // Descrição da Rotina
+            // Descrição
             XWPFParagraph descParagraph = document.createParagraph();
             XWPFRun descRun = descParagraph.createRun();
-            descRun.setText(rotina.getDescricao() != null ? rotina.getDescricao() : "Sem descrição");
-            descRun.setFontFamily("Tahoma");
-            descRun.setFontSize(10);
+            descRun.setText("Descrição: " + (rotina.getDescricao() != null ? rotina.getDescricao() : "Sem descrição"));
+            descRun.setFontFamily("Arial");
+            descRun.setFontSize(12);
+
+            // Principais Objetivos
+            XWPFParagraph objetivosParagraph = document.createParagraph();
+            XWPFRun objetivosRun = objetivosParagraph.createRun();
+            objetivosRun.setText("Principais Objetivos: " + (rotina.getPrincipaisObjetivos() != null ? rotina.getPrincipaisObjetivos() : "Não informado"));
+            objetivosRun.setFontFamily("Arial");
+            objetivosRun.setFontSize(12);
+
+            // Origens dos Dados
+            XWPFParagraph origensParagraph = document.createParagraph();
+            XWPFRun origensRun = origensParagraph.createRun();
+            origensRun.setText("Origens dos Dados: " + (rotina.getOrigensDados() != null ? rotina.getOrigensDados() : "Não informado"));
+            origensRun.setFontFamily("Arial");
+            origensRun.setFontSize(12);
+
+            // Fatores Críticos de Sucesso
+            XWPFParagraph fatoresParagraph = document.createParagraph();
+            XWPFRun fatoresRun = fatoresParagraph.createRun();
+            fatoresRun.setText("Fatores Críticos de Sucesso: " + (rotina.getFatoresCriticosSucesso() != null ? rotina.getFatoresCriticosSucesso() : "Não informado"));
+            fatoresRun.setFontFamily("Arial");
+            fatoresRun.setFontSize(12);
+
+            // Restrições
+            XWPFParagraph restricoesParagraph = document.createParagraph();
+            XWPFRun restricoesRun = restricoesParagraph.createRun();
+            restricoesRun.setText("Restrições: " + (rotina.getRestricoes() != null ? rotina.getRestricoes() : "Não informado"));
+            restricoesRun.setFontFamily("Arial");
+            restricoesRun.setFontSize(12);
 
             addEmptyLine(document, 1);
         }

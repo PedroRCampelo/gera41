@@ -84,7 +84,7 @@ public class DocumentoController {
         if (rotinasIds != null && ordens != null && rotinasIds.size() == ordens.size()) {
             for (int i = 0; i < rotinasIds.size(); i++) {
                 Long rotinaId = rotinasIds.get(i);
-                int ordem = ordens.get(i);
+                Integer ordem = ordens.get(i);
 
                 Optional<Rotina> rotinaOpt = rotinaRepository.findById(rotinaId);
                 if (rotinaOpt.isPresent()) {
@@ -98,7 +98,7 @@ public class DocumentoController {
             }
         }
 
-        documento.setDataCriacao(LocalDate.now()); // Adicionar data de criação
+        documento.setDataCriacao(LocalDate.now());
         documentoRepository.save(documento);
         LOGGER.info("Documento salvo com ID: " + documento.getId());
         return "redirect:/documentos/listar";
